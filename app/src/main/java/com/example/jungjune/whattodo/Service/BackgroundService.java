@@ -16,6 +16,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.jungjune.whattodo.Activity.MainActivity;
+import com.example.jungjune.whattodo.Utill.Dates;
 import com.example.jungjune.whattodo.Utill.SaveData;
 
 public class BackgroundService extends Service implements SensorListener{
@@ -29,6 +30,7 @@ public class BackgroundService extends Service implements SensorListener{
     private SaveData saveData;
     private  int month,day;
     private  String texts;
+    private Dates dates;
     IBinder mBinder = new BackgroundService.LocalBinder();
 
     @Nullable
@@ -40,6 +42,7 @@ public class BackgroundService extends Service implements SensorListener{
     @Override
     public void onCreate() {
         super.onCreate();
+        dates = new Dates();
         sensorMgr= (SensorManager) getSystemService(SENSOR_SERVICE);
         sensorMgr.registerListener(this,
                 SensorManager.SENSOR_ACCELEROMETER,
@@ -92,9 +95,8 @@ public class BackgroundService extends Service implements SensorListener{
                     if(shakeTime>4){
                         if(canSave){
                             Log.e("canSave",canSave+"");
-                            saveData.Save();
                             saveData.LoadData();
-                            saveData.addItem(month,day,texts,6,false);
+                            saveData.addItem(month,day,dates.getYear(),texts,6,false);
                             saveData.Save();
                             Toast.makeText(getApplicationContext(), "저장되었습니다", Toast.LENGTH_SHORT).show();
                             shakeTime=0;

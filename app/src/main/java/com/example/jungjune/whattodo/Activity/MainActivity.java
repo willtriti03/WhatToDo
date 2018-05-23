@@ -4,7 +4,10 @@ import android.app.Activity;
 
 import com.example.jungjune.whattodo.Service.BackgroundService;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+
+import android.app.ActivityManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
@@ -46,61 +49,65 @@ import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends Activity {
+
+    private int day;
+    private int year;
+    private int month;
+    private int alphaNum = 0;
+    private boolean backService = true;
+
+    private ArrayList<TaskItem> data;
+    private SaveData saveData;
+    private final Dates d = new Dates();
+
     private Button dateBtn[] = new Button[4];
-    private LinearLayout calenderBtn;
+    private ListView listView;
+    private TextView dateText;
     private ImageView calender;
-    private int alphaNum=0;
-    private static MainActivity instance;
-    TaskAdapter taskAdapter;
-    ListView listView;
-    SharedPreferences.Editor editor;
-    SaveData saveData;
-    LinearLayout addBtn;
-    int month;
-    int day;
-    int year;
-    public static MainActivity getInstance() {
-        if (instance == null)
-            return instance = new MainActivity();
-        else
-            return instance;
-    }
+    private TaskAdapter taskAdapter;
+    private LinearLayout calenderBtn;
+    private LinearLayout addBtn;
+    private SharedPreferences.Editor editor;
+    private InputMethodManager imm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Dates d = new Dates();
-        final InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-
-        editor= getPreferences(MODE_PRIVATE).edit();
-
-        saveData = new SaveData(getPreferences(MODE_PRIVATE),editor);
-        BackgroundService.getInstance().setSaveData(saveData);
-        saveData.deleteYesterday(d.getMounth(),d.getDay());
-        bindService(new Intent(MainActivity.this,BackgroundService.class),mUploadConnection,BIND_AUTO_CREATE);
-
-        dateBtn[0] = (Button)findViewById(R.id.mainTodayBtn);
-        dateBtn[1] = (Button)findViewById(R.id.mainTomorrowBtn);
-        dateBtn[2] = (Button)findViewById(R.id.mainNextWeekBtn);
-        dateBtn[3] = (Button)findViewById(R.id.mainNoneBtn);
-
-        calenderBtn = (LinearLayout) findViewById(R.id.mainCalenderBtn);
-        calender = (ImageView)findViewById(R.id.mainCalender);
-        addBtn = (LinearLayout)findViewById(R.id.mainAddBTN);
-       // startActivity(new Intent(MainActivity.this,SplashActivity.class));
-
-        ArrayList<TaskItem> data =  saveData.LoadData();
-        listView = (ListView) findViewById(R.id.mainTaskList);
-        taskAdapter = new TaskAdapter(this,R.layout.item_task,data,this);
-        listView.setAdapter(taskAdapter);
-
-        year =2018;
+        year = 2018;
         month = d.getMounth();
-        day=d.getDay();
+        day = d.getDay();
 
-        TextView dateText = (TextView)findViewById(R.id.mainDateText);
+        imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+
+        editor = getPreferences(MODE_PRIVATE).edit();
+
+        taskAdapter = new TaskAdapter(this, R.layout.item_task, data, this);
+
+        saveData = new SaveData(getPreferences(MODE_PRIVATE), editor);
+        saveData.deleteYesterday(d.getMounth(), d.getDay());
+        data = saveData.LoadData();
+
+        if(!isMyServiceRunning(BackgroundService.class)&&backService){
+            BackgroundService.getInstance().setSaveData(saveData);
+            bindService(new Intent(MainActivity.this, BackgroundService.class), mUploadConnection, BIND_AUTO_CREATE);
+        }
+
+
+        dateText = (TextView) findViewById(R.id.mainDateText);
+
+        dateBtn[0] = (Button) findViewById(R.id.mainTodayBtn);
+        dateBtn[1] = (Button) findViewById(R.id.mainTomorrowBtn);
+        dateBtn[2] = (Button) findViewById(R.id.mainNextWeekBtn);
+        dateBtn[3] = (Button) findViewById(R.id.mainNoneBtn);
+
+        addBtn = (LinearLayout) findViewById(R.id.mainAddBTN);
+        calender = (ImageView) findViewById(R.id.mainCalender);
+        calenderBtn = (LinearLayout) findViewById(R.id.mainCalenderBtn);
+
+        listView = (ListView) findViewById(R.id.mainTaskList);
+        listView.setAdapter(taskAdapter);
 
         dateText.setText(d.toString());
 
@@ -108,16 +115,16 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 calender.setBackground(getDrawable(R.drawable.calendar_on));
-                for(int j =0; j<4; ++j){
-                        dateBtn[j].setTextColor(getColor(R.color.turnOff));
+                for (int j = 0; j < 4; ++j) {
+                    dateBtn[j].setTextColor(getColor(R.color.turnOff));
                 }
-                DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(dateSetListener,year,month,day);
+                DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(dateSetListener, year, month, day);
 
                 datePickerDialog.setThemeDark(false);
 
                 datePickerDialog.showYearPickerFirst(false);
 
-                datePickerDialog.setAccentColor(Color.parseColor("#FCF1CA"));
+                datePickerDialog.setAccentColor(getColor(R.color.background));
 
                 datePickerDialog.setTitle("Select Date From DatePickerDialog");
 
@@ -125,45 +132,43 @@ public class MainActivity extends Activity {
             }
         });
 
-        final EditText ed = (EditText)findViewById(R.id.mainAddItem);
+        final EditText ed = (EditText) findViewById(R.id.mainAddItem);
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(ed.getText().toString().length()!=0) {
-                    imm.hideSoftInputFromWindow(ed.getWindowToken(),0);
-                    TaskItem ts = new TaskItem(month, day + alphaNum, ed.getText().toString(), 6, false);
+                if (ed.getText().toString().length() != 0) {
+                    imm.hideSoftInputFromWindow(ed.getWindowToken(), 0);
+                    TaskItem ts = new TaskItem(month, day + alphaNum, year,d.getDate(alphaNum), ed.getText().toString(), 6, false);
                     taskAdapter.additem(ts);
                     ed.setText("");
                     ed.clearFocus();
                     refresh();
-                }else
-                    Toast.makeText(getApplicationContext(),"내용을 입력해주세요",Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(getApplicationContext(), "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
             }
         });
 
-        for(int i =0; i< 4; ++i){
+        for (int i = 0; i < 4; ++i) {
             final int finalI = i;
             dateBtn[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    month = d.getMounth();
-                    day=d.getDay();
                     calender.setBackground(getDrawable(R.drawable.calendar_off));
-                    for(int j =0; j<4; ++j){
-                        if(finalI !=j)
+                    for (int j = 0; j < 4; ++j) {
+                        if (finalI != j)
                             dateBtn[j].setTextColor(getColor(R.color.turnOff));
                         else
                             dateBtn[j].setTextColor(getColor(R.color.turnOn));
                     }
-                    switch (finalI){
+                    switch (finalI) {
                         case 0:
-                            alphaNum=0;
+                            alphaNum = 0;
                             break;
                         case 1:
-                            alphaNum=1;
+                            alphaNum = 1;
                             break;
                         case 2:
-                            alphaNum=7;
+                            alphaNum = 7;
                             break;
                         case 3:
                             alphaNum = -1;
@@ -174,27 +179,40 @@ public class MainActivity extends Activity {
         }
 
     }
-        private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
 
-            @Override
-            public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-                // TODO Auto-generated method stub
 
-                String msg = String.format("%d / %d / %d", year,monthOfYear+1, dayOfMonth);
-                month = monthOfYear+1;
-                day =dayOfMonth;
-                alphaNum =0;
-                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
 
+    private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+
+        @Override
+        public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+            // TODO Auto-generated method stub
+            String msg = String.format("%d / %d / %d", year, monthOfYear + 1, dayOfMonth);
+            month = monthOfYear + 1;
+            day = dayOfMonth;
+            alphaNum = 0;
+            Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+
+        }
+
+    };
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
             }
+        }
+        return false;
+    }
 
-        };
-
-    public void refresh(){
+    public void refresh() {
         saveData.fixSorting();
         taskAdapter.notifyDataSetChanged();
         saveData.Save();
     }
+
     ServiceConnection mUploadConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -203,10 +221,13 @@ public class MainActivity extends Activity {
             mLocalBinder.getServerInstance().setSaveData(saveData);
 
         }
+
         @Override
         public void onServiceDisconnected(ComponentName name) {
             Log.e("connected", "failed");
         }
 
     };
+    public boolean getBackService(){return backService;}
+    public void setBackService(boolean backService){this.backService =backService;}
 }

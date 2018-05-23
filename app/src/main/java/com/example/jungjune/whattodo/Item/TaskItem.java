@@ -3,19 +3,21 @@ package com.example.jungjune.whattodo.Item;
 import android.graphics.drawable.Drawable;
 
 public class TaskItem {
-    private  int month;
+    private int month;
     private int day;
-    private String date;
-    private String text;
+    private int year;
     private int color;
     private int state=0;
+    private String date;
+    private String text;
     private boolean repeat;
     private boolean fix;
 
-    public  TaskItem(int month,int day,String text,int color, boolean fix){
+    public  TaskItem(int month,int day,int year ,String date,String text,int color, boolean fix){
         this.month =month;
         this.day = day;
-        this.date= month+"."+day;
+        this.year =year;
+        this.date= year+"."+month+"."+day+" "+date;
         this.text = text;
         this.color =color;
         this.fix =fix;

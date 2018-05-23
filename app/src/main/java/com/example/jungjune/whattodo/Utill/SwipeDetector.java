@@ -18,6 +18,9 @@ public class SwipeDetector implements View.OnTouchListener {
 
     public void onSwipeRight() {
     }
+    public void onDoubleTaps(){
+
+    }
 
     public boolean onTouch(View v, MotionEvent event) {
         return gestureDetector.onTouchEvent(event);
@@ -31,6 +34,12 @@ public class SwipeDetector implements View.OnTouchListener {
         @Override
         public boolean onDown(MotionEvent e) {
             return true;
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            onDoubleTaps();
+            return super.onDoubleTap(e);
         }
 
         @Override

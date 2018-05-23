@@ -53,8 +53,8 @@ public class TaskAdapter extends BaseAdapter {
         animTransRightIn = AnimationUtils.loadAnimation(context,R.anim.animation_right_in);
         animTransLeftIn = AnimationUtils.loadAnimation(context,R.anim.animation_left_in);
     }
-    public void addItem(int month,int day,String text,int color, boolean fix){
-        data.add(new TaskItem(month,day,text,color,fix));
+    public void addItem(int month,int day,int year,String date,String text,int color, boolean fix){
+        data.add(new TaskItem(month,day,year,date,text,color,fix));
         mainActivity.refresh();
     }
     public void additem(TaskItem ts){

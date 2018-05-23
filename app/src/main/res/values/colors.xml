@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="turnOff">#B4B4B4</color>
     <color name="turnOn">#000000</color>
+    <color name="background">#FCF1CA</color>
 </resources>
