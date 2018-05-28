@@ -1,161 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFF9E5"
     android:orientation="vertical"
     android:weightSum="10"
-    android:background="#FFF9E5">
+    android:id="@+id/mainContentPanel">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:layout_weight="0.7"
-        android:gravity="center|right"
-        android:weightSum="10">
-        <TextView
-            android:id="@+id/mainDateText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:gravity="right"
-            android:text="03.21 MON"
-            android:textColor="#000000"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:layout_weight="1"
-        android:weightSum="10">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center|right"
+            android:orientation="vertical"
+            android:weightSum="10">
+
+            <TextView
+                android:id="@+id/mainDateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
+                android:gravity="right"
+                android:text="03.21 MON"
+                android:textColor="#000000" />
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="6.5"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="5dp"
-            android:orientation="horizontal"
-            android:weightSum="10"
-            android:background="@drawable/drawble_round_rectangle">
-            <EditText
-                android:id="@+id/mainAddItem"
-                android:layout_width="0dp"
+            android:layout_weight="8"
+            android:paddingBottom="5dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="5dp"
+            android:layout_marginBottom="80dp">
+
+            <ListView
+                android:id="@+id/mainTaskList"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="textMultiLine"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="5dp"
-                android:layout_weight="9"
-                android:maxLines="2"
-                android:hint="Add task"
-                android:gravity="left|center"
-                android:textSize="12sp"
-                android:background="@android:color/transparent"/>
-            <LinearLayout
-                android:id="@+id/mainAddBTN"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="@drawable/plus"/>
-            </LinearLayout>
+                android:choiceMode="singleChoice"
+                android:divider="#666666"
+                android:dividerHeight="0.5dp"
+                android:scrollbars="none"></ListView>
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        style="@android:style/DeviceDefault.ButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:background="#FFF9E5"
+        android:weightSum="10">
+
         <LinearLayout
             android:id="@+id/mainBTNBox"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="3.5"
-            android:weightSum="10"
+            android:gravity="left"
             android:orientation="horizontal"
             android:paddingLeft="15dp"
-            android:gravity="left">
+            android:layout_marginBottom="5dp"
+            android:weightSum="10">
+
             <LinearLayout
                 android:id="@+id/mainCalenderBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginRight="5dp"
                 android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:gravity="center"
                 android:orientation="vertical">
+
                 <ImageView
                     android:id="@+id/mainCalender"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:background="@drawable/calendar_off"/>
+                    android:background="@drawable/calendar_off" />
             </LinearLayout>
+
             <Button
                 android:id="@+id/mainTodayBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:gravity="center"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:gravity="center"
                 android:text="Today"
-                android:textSize="12sp"
-                android:background="@android:color/transparent"/>
+                android:textSize="12sp" />
+
             <Button
                 android:id="@+id/mainTomorrowBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:gravity="center"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:gravity="center"
                 android:text="Tomorrow"
                 android:textColor="#B4B4B4"
-                android:textSize="12sp"
-                android:background="@android:color/transparent"/>
+                android:textSize="12sp" />
+
             <Button
                 android:id="@+id/mainNextWeekBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:background="@android:color/transparent"
                 android:gravity="center"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:text="Next Week"
                 android:textColor="#B4B4B4"
-                android:textSize="12sp"
-                android:background="@android:color/transparent"/>
+                android:textSize="12sp" />
+
             <Button
                 android:id="@+id/mainNoneBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:gravity="center"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:gravity="center"
                 android:text="None"
                 android:textColor="#B4B4B4"
-                android:textSize="12sp"
-                android:background="@android:color/transparent"/>
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_weight="6.5"
+            android:background="@drawable/drawble_round_rectangle"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <EditText
+                android:id="@+id/mainAddItem"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="9"
+                android:background="@android:color/transparent"
+                android:gravity="left|center"
+                android:hint="Add task"
+                android:inputType="textMultiLine"
+                android:maxLines="2"
+                android:textSize="12sp" >
+                <requestFocus/>
+            </EditText>
+
+            <LinearLayout
+                android:id="@+id/mainAddBTN"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/plus" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="7.8"
-        android:paddingRight="15dp"
-        android:paddingLeft="15dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp">
-        <ListView
-            android:id="@+id/mainTaskList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="#666666"
-            android:dividerHeight="0.5dp"
-            android:choiceMode="singleChoice"
-            android:scrollbars="none"></ListView>
-    </LinearLayout>
 
-
-</LinearLayout>
+</FrameLayout>

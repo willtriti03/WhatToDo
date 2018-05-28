@@ -2,7 +2,10 @@ package com.example.jungjune.whattodo.Activity;
 
 import android.app.Activity;
 
+import com.example.jungjune.whattodo.Custom.CustomColorBarLinearLayout;
 import com.example.jungjune.whattodo.Service.BackgroundService;
+
+import com.example.jungjune.whattodo.Utill.SwipeDetector;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import android.app.ActivityManager;
@@ -23,12 +26,15 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SubMenu;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -55,12 +61,19 @@ public class MainActivity extends Activity {
     private int month;
     private int alphaNum = 0;
     private boolean backService = true;
+    private boolean isActive = false;
 
     private ArrayList<TaskItem> data;
     private SaveData saveData;
     private final Dates d = new Dates();
 
+    private Animation animTransRightOut;
+    private Animation animTransLeftOut;
+    private Animation animTransRightIn;
+    private Animation animTransLeftIn;
+
     private Button dateBtn[] = new Button[4];
+    private EditText ed;
     private ListView listView;
     private TextView dateText;
     private ImageView calender;
@@ -69,11 +82,17 @@ public class MainActivity extends Activity {
     private LinearLayout addBtn;
     private SharedPreferences.Editor editor;
     private InputMethodManager imm;
+    private FrameLayout conLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        animTransRightOut = AnimationUtils.loadAnimation(this,R.anim.animation_right_out);
+        animTransLeftOut = AnimationUtils.loadAnimation(this,R.anim.animation_left_out);
+        animTransRightIn = AnimationUtils.loadAnimation(this,R.anim.animation_right_in);
+        animTransLeftIn = AnimationUtils.loadAnimation(this,R.anim.animation_left_in);
 
         year = 2018;
         month = d.getMounth();
@@ -83,17 +102,18 @@ public class MainActivity extends Activity {
 
         editor = getPreferences(MODE_PRIVATE).edit();
 
-        taskAdapter = new TaskAdapter(this, R.layout.item_task, data, this);
 
         saveData = new SaveData(getPreferences(MODE_PRIVATE), editor);
         saveData.deleteYesterday(d.getMounth(), d.getDay());
         data = saveData.LoadData();
+        taskAdapter = new TaskAdapter(this, R.layout.item_task, data, this);
 
-        if(!isMyServiceRunning(BackgroundService.class)&&backService){
-            BackgroundService.getInstance().setSaveData(saveData);
-            bindService(new Intent(MainActivity.this, BackgroundService.class), mUploadConnection, BIND_AUTO_CREATE);
-        }
 
+        BackgroundService.getInstance().setSaveData(saveData);
+        if (bindService(new Intent(MainActivity.this, BackgroundService.class), mUploadConnection, BIND_AUTO_CREATE))
+            Toast.makeText(getApplicationContext(), "active", Toast.LENGTH_SHORT).show();
+
+        ed = (EditText) findViewById(R.id.mainAddItem);
 
         dateText = (TextView) findViewById(R.id.mainDateText);
 
@@ -106,10 +126,31 @@ public class MainActivity extends Activity {
         calender = (ImageView) findViewById(R.id.mainCalender);
         calenderBtn = (LinearLayout) findViewById(R.id.mainCalenderBtn);
 
+        conLayout = (FrameLayout)findViewById(R.id.mainContentPanel);
+
         listView = (ListView) findViewById(R.id.mainTaskList);
         listView.setAdapter(taskAdapter);
 
         dateText.setText(d.toString());
+        ed.clearFocus();
+        imm.hideSoftInputFromWindow(ed.getWindowToken(), 0);
+
+        listView.setOnTouchListener(new SwipeDetector(listView,this){
+            @Override
+            public void swipeRight(int position) {
+               Log.e("swipe","right"+position);
+                View v = ((TaskItem) listView.getAdapter().getItem(position)).getView();
+                CustomColorBarLinearLayout customColorBarLinearLayout = (CustomColorBarLinearLayout) v.findViewById(R.id.itemTaskColorBox);
+                customColorBarLinearLayout.setVisibility(View.VISIBLE);
+                customColorBarLinearLayout.startAnimation(animTransRightOut);
+            }
+
+            @Override
+            public void swipeLeft(int position) {
+                Log.e("swipe","left");
+
+            }
+        });
 
         calenderBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,16 +173,14 @@ public class MainActivity extends Activity {
             }
         });
 
-        final EditText ed = (EditText) findViewById(R.id.mainAddItem);
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (ed.getText().toString().length() != 0) {
-                    imm.hideSoftInputFromWindow(ed.getWindowToken(), 0);
-                    TaskItem ts = new TaskItem(month, day + alphaNum, year,d.getDate(alphaNum), ed.getText().toString(), 6, false);
+                    TaskItem ts = new TaskItem(month, day + alphaNum, year, d.getDate(alphaNum), ed.getText().toString(), 6, false);
                     taskAdapter.additem(ts);
                     ed.setText("");
-                    ed.clearFocus();
+                    ed.requestFocus();
                     refresh();
                 } else
                     Toast.makeText(getApplicationContext(), "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
@@ -181,7 +220,6 @@ public class MainActivity extends Activity {
     }
 
 
-
     private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
 
         @Override
@@ -197,10 +235,10 @@ public class MainActivity extends Activity {
 
     };
 
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+    private boolean isMyServiceRunning(Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
+            if (BackgroundService.class.getName().equals(service.service.getClassName())) {
                 return true;
             }
         }
@@ -219,15 +257,22 @@ public class MainActivity extends Activity {
             Log.e("connected", "upload success");
             BackgroundService.LocalBinder mLocalBinder = (BackgroundService.LocalBinder) service;
             mLocalBinder.getServerInstance().setSaveData(saveData);
-
+            isActive = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
+            isActive = false;
             Log.e("connected", "failed");
         }
 
     };
-    public boolean getBackService(){return backService;}
-    public void setBackService(boolean backService){this.backService =backService;}
+
+    public boolean getBackService() {
+        return backService;
+    }
+
+    public void setBackService(boolean backService) {
+        this.backService = backService;
+    }
 }

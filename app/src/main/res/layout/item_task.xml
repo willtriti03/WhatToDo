@@ -1,130 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     android:id="@+id/itemTaskItemBox"
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="50dp"
     android:orientation="horizontal"
     android:background="#FFF9E5"
     android:weightSum="10">
-    <LinearLayout
-        android:id="@+id/itemTaskColorBox"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp">
 
-        <LinearLayout
-            android:id="@+id/itemTaskRedBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center">
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:background="@drawable/drawble_color_circle_red"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/itemTaskOrangeBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center">
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:background="@drawable/drawble_color_circle_orange"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/itemTaskBlueBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center">
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:background="@drawable/drawble_color_circle_blue"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/itemTaskGreenBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center">
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:background="@drawable/drawble_color_circle_green"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/itemTaskMintBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center">
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:background="@drawable/drawble_color_circle_mint"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/itemTaskNavyBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center">
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:background="@drawable/drawble_color_circle_navy"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/itemTaskTransBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center">
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:background="@drawable/drawble_color_circle_trans"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"/>
-        </LinearLayout>
-
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/itemTaskTag"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0.5"
-        android:background="#FFA9B0"
-        android:orientation="vertical">
-    </LinearLayout>
     <LinearLayout
         android:id="@+id/itemTaskTextBox"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="9.5"
         android:weightSum="10"
         android:gravity="center|left"
         android:orientation="horizontal"
         >
+        <LinearLayout
+            android:id="@+id/itemTaskTag"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:background="#FFA9B0"
+            android:orientation="vertical">
+        </LinearLayout>
         <TextView
             android:id="@+id/itemTaskDate"
             android:layout_width="0dp"
@@ -169,64 +67,19 @@
             android:descendantFocusability="blocksDescendants"
             />
     </LinearLayout>
-    <LinearLayout
+
+    <com.example.jungjune.whattodo.Custom.CustomColorBarLinearLayout
+        android:id="@+id/itemTaskColorBox"
+        android:layout_width="350dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="left">
+
+    </com.example.jungjune.whattodo.Custom.CustomColorBarLinearLayout>
+    <com.example.jungjune.whattodo.Custom.CustomMenuBarLinearLayout
         android:id="@+id/itemTaskSettingBox"
-        android:layout_width="0dp"
+        android:layout_width="180dp"
         android:layout_height="match_parent"
-        android:layout_weight="0"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:background="#D7C483">
-        <LinearLayout
-            android:id="@+id/itemTaskFixBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center">
-            <ImageView
-                android:id="@+id/itemTaskPin"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:background="@drawable/push_pin"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"/>
-        </LinearLayout>
+        android:layout_gravity="right">
 
-        <LinearLayout
-            android:id="@+id/itemTaskRepeatBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center">
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:background="@drawable/repeat"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-        android:id="@+id/itemTaskDeleteBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center">
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:background="@drawable/garbage"
-            android:layout_marginLeft="7dp"
-            android:layout_marginRight="7dp"/>
-    </LinearLayout>
-        <LinearLayout
-            android:id="@+id/itemTaskCloseBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center">
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:background="@drawable/error"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"/>
-        </LinearLayout>
-    </LinearLayout>
-</LinearLayout>
+    </com.example.jungjune.whattodo.Custom.CustomMenuBarLinearLayout>
+</FrameLayout>

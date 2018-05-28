@@ -27,8 +27,7 @@ public class SaveData {
         this.editor = editor;
         this.sh = sh;
         data = LoadData();
-        if(data.size()==0)
-            data.add(0, new TaskItem(0, 0, 0,"", "테스트용 일정입니다", 4, false));
+
     }
     public void clearData() {
         editor.clear();
@@ -58,7 +57,8 @@ public class SaveData {
         String connectionsJSONString = sh.getString(KEY_CONNECTIONS, null);
         Type type = new TypeToken<ArrayList<TaskItem>>() {}.getType();
         data = new Gson().fromJson(connectionsJSONString, type);
-
+        if(data == null)
+            data = new ArrayList<TaskItem>();
         return data;
     }
 
