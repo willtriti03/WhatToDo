@@ -95,9 +95,18 @@ public class TaskAdapter extends BaseAdapter {
         customMenuBarLinearLayout.setContext(context);
         customMenuBarLinearLayout.setTaskItem(taskItem);
 
-        customColorBarLinearLayout.setVisibility(View.INVISIBLE);
-        customMenuBarLinearLayout.setVisibility(View.INVISIBLE);
-
+        if (taskItem.getState()==0) {
+            customColorBarLinearLayout.setVisibility(View.INVISIBLE);
+            customMenuBarLinearLayout.setVisibility(View.INVISIBLE);
+        }
+        else if (taskItem.getState()==1) {
+            customColorBarLinearLayout.setVisibility(View.VISIBLE);
+            customMenuBarLinearLayout.setVisibility(View.INVISIBLE);
+        }
+        else if (taskItem.getState()==2) {
+            customColorBarLinearLayout.setVisibility(View.INVISIBLE);
+            customMenuBarLinearLayout.setVisibility(View.VISIBLE);
+        }
 
 
         tag.setBackgroundColor(getTagColor(taskItem.getColor()));
