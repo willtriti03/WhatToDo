@@ -21,6 +21,7 @@ import com.example.jungjune.whattodo.Activity.MainActivity;
 import com.example.jungjune.whattodo.Custom.CustomColorBarLinearLayout;
 import com.example.jungjune.whattodo.Custom.CustomMenuBarLinearLayout;
 import com.example.jungjune.whattodo.Item.TaskItem;
+import com.example.jungjune.whattodo.Item.TaskItemWithView;
 import com.example.jungjune.whattodo.R;
 import com.example.jungjune.whattodo.Utill.SwipeDetector;
 
@@ -31,6 +32,7 @@ import java.util.logging.Logger;
 public class TaskAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private ArrayList<TaskItem> data;
+    private ArrayList<TaskItemWithView> bigData;
     private Context context;
     private int layout;
 
@@ -51,6 +53,10 @@ public class TaskAdapter extends BaseAdapter {
         this.context = context;
         this.mainActivity =mainActivity;
 
+        this.bigData = new ArrayList<TaskItemWithView>();
+        for(int i =0; i< data.size(); ++i){
+            this.bigData.add(new TaskItemWithView(data.get(i)));
+        }
 
         animTransRightOut = AnimationUtils.loadAnimation(context,R.anim.animation_right_out);
         animTransLeftOut = AnimationUtils.loadAnimation(context,R.anim.animation_left_out);
@@ -58,18 +64,15 @@ public class TaskAdapter extends BaseAdapter {
         animTransLeftIn = AnimationUtils.loadAnimation(context,R.anim.animation_left_in);
 
     }
-    public void addItem(int month,int day,int year,String date,String text,int color, boolean fix){
-        data.add(new TaskItem(month,day,year,date,text,color,fix));
-        mainActivity.refresh();
-    }
     public void additem(TaskItem ts){
         data.add(ts);
+        bigData.add(new TaskItemWithView(ts));
         mainActivity.refresh();
     }
     @Override
     public int getCount(){ return data.size(); }
     @Override
-    public TaskItem getItem(int position){return data.get(position);}
+    public TaskItemWithView getItem(int position){return bigData.get(position);}
 
     @Override
     public long getItemId(int position){return position;}
@@ -79,7 +82,7 @@ public class TaskAdapter extends BaseAdapter {
             convertView=inflater.inflate(layout,parent,false);
         }
         final TaskItem taskItem=data.get(position);
-        taskItem.setView(convertView);
+        bigData.get(position).setV(convertView);
         TextView date=(TextView) convertView.findViewById(R.id.itemTaskDate);
         final TextView text= (TextView)convertView.findViewById(R.id.itemTaskText);
         final LinearLayout tag = (LinearLayout)convertView.findViewById(R.id.itemTaskTag);
@@ -102,8 +105,6 @@ public class TaskAdapter extends BaseAdapter {
         setRepeat(taskItem);
         date.setText(taskItem.getDate());
         text.setText(taskItem.getText());
-        taskItem.setCustomColorBarLinearLayout(customColorBarLinearLayout);
-        taskItem.setCustomMenuBarLinearLayout(customMenuBarLinearLayout);
 
         return convertView;
     }

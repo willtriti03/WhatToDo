@@ -16,9 +16,6 @@ public class TaskItem {
     private String text;
     private boolean repeat;
     private boolean fix;
-    private View view;
-    private CustomColorBarLinearLayout customColorBarLinearLayout;
-    private CustomMenuBarLinearLayout customMenuBarLinearLayout;
 
     public  TaskItem(int month,int day,int year ,String date,String text,int color, boolean fix){
         this.month =month;
@@ -97,27 +94,5 @@ public class TaskItem {
         this.month = month;
     }
 
-    public View getView() {
-        return view;
-    }
 
-    public void setView(View view) {
-        this.view = view;
-    }
-
-    public CustomColorBarLinearLayout getCustomColorBarLinearLayout() {
-        return customColorBarLinearLayout;
-    }
-
-    public CustomMenuBarLinearLayout getCustomMenuBarLinearLayout() {
-        return customMenuBarLinearLayout;
-    }
-
-    public void setCustomColorBarLinearLayout(CustomColorBarLinearLayout customColorBarLinearLayout) {
-        this.customColorBarLinearLayout = customColorBarLinearLayout;
-    }
-
-    public void setCustomMenuBarLinearLayout(CustomMenuBarLinearLayout customMenuBarLinearLayout) {
-        this.customMenuBarLinearLayout = customMenuBarLinearLayout;
-    }
 }

@@ -51,7 +51,7 @@ public class SaveData {
         editor.putString(KEY_CONNECTIONS, connectionsJSONString);
         editor.commit();
 
-    }
+        }
 
     public ArrayList<TaskItem> LoadData() {
         String connectionsJSONString = sh.getString(KEY_CONNECTIONS, null);
@@ -59,6 +59,10 @@ public class SaveData {
         data = new Gson().fromJson(connectionsJSONString, type);
         if(data == null)
             data = new ArrayList<TaskItem>();
+        else
+            for (int i =0; i<data.size(); ++i){
+                data.get(i).setState(0);
+            }
         return data;
     }
 

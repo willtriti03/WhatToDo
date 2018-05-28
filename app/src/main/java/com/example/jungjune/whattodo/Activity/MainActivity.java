@@ -3,6 +3,8 @@ package com.example.jungjune.whattodo.Activity;
 import android.app.Activity;
 
 import com.example.jungjune.whattodo.Custom.CustomColorBarLinearLayout;
+import com.example.jungjune.whattodo.Custom.CustomMenuBarLinearLayout;
+import com.example.jungjune.whattodo.Item.TaskItemWithView;
 import com.example.jungjune.whattodo.Service.BackgroundService;
 
 import com.example.jungjune.whattodo.Utill.SwipeDetector;
@@ -89,10 +91,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        animTransRightOut = AnimationUtils.loadAnimation(this,R.anim.animation_right_out);
-        animTransLeftOut = AnimationUtils.loadAnimation(this,R.anim.animation_left_out);
-        animTransRightIn = AnimationUtils.loadAnimation(this,R.anim.animation_right_in);
-        animTransLeftIn = AnimationUtils.loadAnimation(this,R.anim.animation_left_in);
+
 
         year = 2018;
         month = d.getMounth();
@@ -138,16 +137,67 @@ public class MainActivity extends Activity {
         listView.setOnTouchListener(new SwipeDetector(listView,this){
             @Override
             public void swipeRight(int position) {
-               Log.e("swipe","right"+position);
-                View v = ((TaskItem) listView.getAdapter().getItem(position)).getView();
+                View v = ((TaskItemWithView) listView.getAdapter().getItem(position)).getV();
                 CustomColorBarLinearLayout customColorBarLinearLayout = (CustomColorBarLinearLayout) v.findViewById(R.id.itemTaskColorBox);
-                customColorBarLinearLayout.setVisibility(View.VISIBLE);
-                customColorBarLinearLayout.startAnimation(animTransRightOut);
+                final CustomMenuBarLinearLayout customMenuBarLinearLayout = (CustomMenuBarLinearLayout)v.findViewById(R.id.itemTaskSettingBox);
+                setAni(v.getContext());
+                if(((TaskItemWithView) listView.getAdapter().getItem(position)).getTaskItem().getState()==0) {
+                    ((TaskItemWithView) listView.getAdapter().getItem(position)).getTaskItem().setState(1);
+                    customColorBarLinearLayout.setVisibility(View.VISIBLE);
+                    customColorBarLinearLayout.startAnimation(animTransRightOut);
+                }else if(((TaskItemWithView) listView.getAdapter().getItem(position)).getTaskItem().getState()==2){
+                    ((TaskItemWithView) listView.getAdapter().getItem(position)).getTaskItem().setState(0);
+                    customMenuBarLinearLayout.startAnimation(animTransRightIn);
+                    animTransRightIn.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            customMenuBarLinearLayout.setVisibility(View.INVISIBLE);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                }
             }
 
             @Override
             public void swipeLeft(int position) {
-                Log.e("swipe","left");
+                View v = ((TaskItemWithView) listView.getAdapter().getItem(position)).getV();
+                final CustomColorBarLinearLayout customColorBarLinearLayout = (CustomColorBarLinearLayout) v.findViewById(R.id.itemTaskColorBox);
+                CustomMenuBarLinearLayout customMenuBarLinearLayout = (CustomMenuBarLinearLayout)v.findViewById(R.id.itemTaskSettingBox);
+                setAni(v.getContext());
+                if(((TaskItemWithView) listView.getAdapter().getItem(position)).getTaskItem().getState()==0) {
+                    ((TaskItemWithView) listView.getAdapter().getItem(position)).getTaskItem().setState(2);
+                    customMenuBarLinearLayout.setVisibility(View.VISIBLE);
+                    customMenuBarLinearLayout.startAnimation(animTransLeftOut);
+                }else if(((TaskItemWithView) listView.getAdapter().getItem(position)).getTaskItem().getState()==1){
+                    ((TaskItemWithView) listView.getAdapter().getItem(position)).getTaskItem().setState(0);
+                    customColorBarLinearLayout.startAnimation(animTransLeftIn);
+                    animTransLeftIn.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            customColorBarLinearLayout.setVisibility(View.INVISIBLE);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+
+                }
 
             }
         });
@@ -275,4 +325,11 @@ public class MainActivity extends Activity {
     public void setBackService(boolean backService) {
         this.backService = backService;
     }
+    private void setAni(Context context){
+        animTransRightOut = AnimationUtils.loadAnimation(context,R.anim.animation_right_out);
+        animTransLeftOut = AnimationUtils.loadAnimation(context,R.anim.animation_left_out);
+        animTransRightIn = AnimationUtils.loadAnimation(context,R.anim.animation_right_in);
+        animTransLeftIn = AnimationUtils.loadAnimation(context,R.anim.animation_left_in);
+    }
+
 }
