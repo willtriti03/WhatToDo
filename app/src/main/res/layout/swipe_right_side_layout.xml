@@ -29,7 +29,9 @@
             android:layout_height="match_parent"
             android:gravity="center">
             <ImageView
+                android:id="@+id/itemTaskRepeat"
                 android:layout_width="25dp"
+
                 android:layout_height="25dp"
                 android:background="@drawable/repeat"
                 android:layout_marginLeft="7dp"
@@ -45,18 +47,6 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:background="@drawable/garbage"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/itemTaskCloseBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center">
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:background="@drawable/error"
                 android:layout_marginLeft="7dp"
                 android:layout_marginRight="7dp"/>
         </LinearLayout>

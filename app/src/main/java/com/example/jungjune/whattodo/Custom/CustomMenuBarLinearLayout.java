@@ -2,19 +2,24 @@ package com.example.jungjune.whattodo.Custom;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.example.jungjune.whattodo.Adapter.TaskAdapter;
 import com.example.jungjune.whattodo.Item.TaskItem;
+import com.example.jungjune.whattodo.Item.TaskItemWithView;
 import com.example.jungjune.whattodo.R;
 
 public class CustomMenuBarLinearLayout extends LinearLayout{
     private ImageView pin;
-
+    private  ImageView repeat;
     private TaskItem taskItem;
+    private TaskItemWithView taskItemWithView;
     private Context context;
+    private TaskAdapter adapter;
     private View v;
 
     public CustomMenuBarLinearLayout(Context context) {
@@ -43,12 +48,41 @@ public class CustomMenuBarLinearLayout extends LinearLayout{
         addView(v);
 
         pin = (ImageView)v.findViewById(R.id.itemTaskPin);
+        repeat = (ImageView)v.findViewById(R.id.itemTaskRepeat);
 
 
         LinearLayout fixBtn = (LinearLayout)v.findViewById(R.id.itemTaskFixBtn);
         LinearLayout repeatBtn =(LinearLayout)v.findViewById(R.id.itemTaskRepeatBtn);
         LinearLayout deleteBtn = (LinearLayout)v.findViewById(R.id.itemTaskDeleteBtn);
-        LinearLayout closeBtn = (LinearLayout)v.findViewById(R.id.itemTaskCloseBtn);
+
+
+        fixBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                taskItem.setFix(!taskItem.getFix());
+                taskItem.setState(0);
+                setPin(taskItem);
+                adapter.fixSorting(taskItem,taskItemWithView);
+
+            }
+        });
+
+        repeatBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                taskItem.setRepeat(!taskItem.getRepeat());
+                setRepeat(taskItem);
+                adapter.setRepeat(taskItem);
+            }
+        });
+
+        deleteBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                taskItem.setDeleted(true);
+                adapter.deleteItem(taskItem,taskItemWithView);
+            }
+        });
     }
     private void setPin(TaskItem taskItem){
         if(taskItem.getFix())
@@ -58,14 +92,29 @@ public class CustomMenuBarLinearLayout extends LinearLayout{
 
     }
 
+    private  void  setRepeat(TaskItem taskItem){
+        if(taskItem.getRepeatB())
+            repeat.setBackground(context.getDrawable(R.drawable.repeat));
+        else
+            repeat.setBackground(context.getDrawable(R.drawable.error));
+
+    }
 
     public void setTaskItem(TaskItem taskItem) {
         this.taskItem = taskItem;
         setPin(taskItem);
-        //setRepeat(taskItem);
+        setRepeat(taskItem);
     }
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    public void setAdapter(TaskAdapter adapter) {
+        this.adapter = adapter;
+    }
+
+    public void setTaskItemWithView(TaskItemWithView taskItemWithView) {
+        this.taskItemWithView = taskItemWithView;
     }
 }

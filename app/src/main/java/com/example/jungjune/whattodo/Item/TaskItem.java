@@ -1,5 +1,6 @@
 package com.example.jungjune.whattodo.Item;
 
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
@@ -11,20 +12,22 @@ public class TaskItem {
     private int day;
     private int year;
     private int color;
-    private int state=0;
+    private int state = 0;
     private String date;
     private String text;
     private boolean repeat;
     private boolean fix;
+    private boolean deleted;
 
-    public  TaskItem(int month,int day,int year ,String date,String text,int color, boolean fix){
-        this.month =month;
+    public TaskItem(int month, int day, int year, String date, String text, int color, boolean fix) {
+        this.month = month;
         this.day = day;
-        this.year =year;
-        this.date= year+"."+month+"."+day+" "+date;
+        this.year = year;
+        this.date = year + "." + month + "." + day + " " + date;
         this.text = text;
-        this.color =color;
-        this.fix =fix;
+        this.color = color;
+        this.fix = fix;
+        this.deleted = false;
         repeat = false;
     }
 
@@ -55,13 +58,19 @@ public class TaskItem {
     public int getState() {
         return state;
     }
-    public  int getRepeat(){
-        if (repeat)
-        return  1;
-    else
-        return  0;}
-        public  boolean getRepeatB(){
-            return repeat; }
+
+    public boolean getRepeat() {
+        return repeat;
+    }
+
+    public boolean getRepeatB() {
+        return repeat;
+    }
+
+    public boolean getDeleted() {
+        return deleted;
+    }
+
     public void setColor(int color) {
         this.color = color;
     }
@@ -83,7 +92,7 @@ public class TaskItem {
     }
 
     public void setRepeat(boolean repeat) {
-        this.repeat =repeat;
+        this.repeat = repeat;
     }
 
     public void setDay(int day) {
@@ -94,5 +103,7 @@ public class TaskItem {
         this.month = month;
     }
 
-
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 }
