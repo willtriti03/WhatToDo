@@ -61,7 +61,7 @@ public class Dates {
 
         }
         days += day;
-        return date[days/7];
+        return date[days%7];
     }
     @Override
     public String toString() {

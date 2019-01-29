@@ -108,8 +108,8 @@ public class MainActivity extends Activity {
 
 
         BackgroundService.getInstance().setSaveData(saveData);
-        if (bindService(new Intent(MainActivity.this, BackgroundService.class), mUploadConnection, BIND_AUTO_CREATE))
-            Toast.makeText(getApplicationContext(), "active", Toast.LENGTH_SHORT).show();
+        if (bindService(new Intent(MainActivity.this, BackgroundService.class), mUploadConnection, BIND_AUTO_CREATE));
+
 
         ed = (EditText) findViewById(R.id.mainAddItem);
 
